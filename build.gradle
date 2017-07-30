@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+    }
+}
+
+ext {
+    dropwizardVersion = '1.1.0'
+    dropwizardSwaggerVersion = '1.1.0-1'
+    retrofitVersion = '2.3.0'
+    metricsVersion = '3.1.0'
+    lombokVersion = '1.16.8'
+}
+
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'application'
+apply plugin: "com.github.johnrengelman.shadow"
+
+group = 'com.zulily'
+version = '0.0.1'
+mainClassName = "com.neighbourly.NeighbourlyApplication"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+    compile group: 'com.smoketurner', name: 'dropwizard-swagger', version: dropwizardSwaggerVersion
+    compile group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofitVersion
+    compile group: 'io.dropwizard.metrics', name: 'metrics-core', version: metricsVersion
+    compile group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+}
+
+
+idea {
+    module {
+        //if you prefer different SDK than that inherited from IDEA project
+        jdkName = '1.8'
+
+        //if you love browsing Javadoc
+        downloadJavadoc = true
+
+        //and hate reading sources :)
+        downloadSources = true
+    }
+}
+
+shadowJar {
+    mergeServiceFiles()
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+}
+
+run {
+    args 'server', 'environments/neighbourly-dev.yml'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.0'
+}

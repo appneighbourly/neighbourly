@@ -1,0 +1,29 @@
+appName: Neighbourly Service !!!
+
+swagger:
+  resourcePackage: "com.neighbourly.resource"
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      threshold: INFO
+      timeZone: GMT
+      target: stdout
+      logFormat: "%level [%d] %logger : %mdc{trace-id} %replace(%msg){'\n', '\\\\n'} %replace(%ex){'\n', '\\\\n'}%nopex%n"
+
+server:
+  type: default
+  applicationConnectors:
+    - type: http
+      port: 9090
+  adminConnectors:
+    - type: http
+      port: 9091
+  type: default
+  requestLog:
+    type: classic
+    timeZone: PST
+    appenders:
+      - type: console
+        threshold: ALL
